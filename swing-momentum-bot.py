@@ -139,10 +139,16 @@ def fetch_market_trends():
     vix = yf.download('^VIX', period='1d', interval='1d', progress=False)
     sector_etfs = ['XLF', 'XLK', 'XLE', 'XLU', 'XLY']
     trends = {}
+    if vix is not None and not vix.empty and len(vix) > 0:
+        trends['VIX'] = round(vix['Close'].iloc[-1], 2)
+    else:
+        trends['VIX'] = None
     for etf in sector_etfs:
         df = yf.download(etf, period='1d', interval='1d', progress=False)
-        trends[etf] = round(df['Close'].iloc[-1], 2) if not df.empty and len(df) > 0 else None
-    trends['VIX'] = round(vix['Close'].iloc[-1], 2) if not vix.empty and len(vix) > 0 else None
+        if df is not None and not df.empty and len(df) > 0:
+            trends[etf] = round(df['Close'].iloc[-1], 2)
+        else:
+            trends[etf] = None
     return trends
 
 st.subheader("Top Trade Signals")
