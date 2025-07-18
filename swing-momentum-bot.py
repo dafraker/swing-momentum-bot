@@ -172,7 +172,12 @@ for i, ticker in enumerate(TICKERS):
             results.append(trade)
     progress_bar.progress((i + 1) / len(TICKERS))
 
-df_results = pd.DataFrame(results)
+if not results:
+    st.warning("No trade signals generated. This may be due to data fetch failures or no matching conditions.")
+    df_results = pd.DataFrame()
+else:
+    df_results = pd.DataFrame(results)
+
 if not df_results.empty:
     buy_signals = df_results[df_results['Signal'] == 'BUY'].sort_values(by='Signal_Score', ascending=False).head(10)
     st.write("**Top BUY Signals**")
