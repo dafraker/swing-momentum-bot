@@ -140,13 +140,23 @@ def fetch_market_trends():
     sector_etfs = ['XLF', 'XLK', 'XLE', 'XLU', 'XLY']
     trends = {}
     if vix is not None and not vix.empty and len(vix) > 0:
-        trends['VIX'] = round(vix['Close'].iloc[-1], 2)
+        if 'Close' in vix.columns:
+            trends['VIX'] = round(vix['Close'].iloc[-1], 2)
+        elif 'Adj Close' in vix.columns:
+            trends['VIX'] = round(vix['Adj Close'].iloc[-1], 2)
+        else:
+            trends['VIX'] = None
     else:
         trends['VIX'] = None
     for etf in sector_etfs:
         df = yf.download(etf, period='1d', interval='1d', progress=False)
         if df is not None and not df.empty and len(df) > 0:
-            trends[etf] = round(df['Close'].iloc[-1], 2)
+            if 'Close' in df.columns:
+                trends[etf] = round(df['Close'].iloc[-1], 2)
+            elif 'Adj Close' in df.columns:
+                trends[etf] = round(df['Adj Close'].iloc[-1], 2)
+            else:
+                trends[etf] = None
         else:
             trends[etf] = None
     return trends
