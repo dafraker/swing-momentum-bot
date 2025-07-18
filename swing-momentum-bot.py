@@ -1,9 +1,9 @@
 import yfinance as yf
-   import pandas as pd
-   import streamlit as st
-   import datetime
-   import plotly.graph_objects as go
-   from plotly.subplots import make_subplots
+import pandas as pd
+import streamlit as st
+import datetime
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
    # Page configuration
    st.set_page_config(page_title="Swing Momentum Bot", layout="wide")
