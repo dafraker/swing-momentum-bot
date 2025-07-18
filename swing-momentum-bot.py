@@ -21,7 +21,7 @@ TICKERS = [
 ]
 ENTRY_TIME = "15:45"
 EXIT_TIME = "09:31"
-BUY_THRESHOLD = 40  # Temporarily increased to test
+BUY_THRESHOLD = 50  # Increased to 50 for testing
 SELL_THRESHOLD = 70
 MACD_FAST = 12
 MACD_SLOW = 26
@@ -237,4 +237,4 @@ st.markdown("""
 - **API Limits**: Large ticker lists may hit yfinance rate limits; reduce TICKERS if slow.
 """)
 
-st.caption("Bot scans for EOD BUY signals (RSI < 40, price > EMA20, MACD bullish, near BB lower). Targets call options with ~0.4 delta for overnight holds.")
+st.caption("Bot scans for EOD BUY signals (RSI < 50, price > EMA20, MACD bullish, near BB lower). Targets call options with ~0.4 delta for overnight holds.")
