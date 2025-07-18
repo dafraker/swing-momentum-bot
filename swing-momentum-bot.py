@@ -29,7 +29,7 @@ MACD_SIGNAL = 9
 BB_PERIOD = 20
 BB_STD = 2
 DELTA_TARGET = 0.4
-MIN_VOLUME = 1000000
+MIN_VOLUME = 500000  # Temporarily lowered to test
 
 st.title("📈 Swing Momentum Bot Dashboard")
 st.markdown("Scans ~100 tickers for overnight swing trades with momentum indicators and call option suggestions.")
@@ -163,15 +163,20 @@ def fetch_market_trends():
 
 st.subheader("Top Trade Signals")
 results = []
+fetch_count = 0
+trade_count = 0
 progress_bar = st.progress(0)
 for i, ticker in enumerate(TICKERS):
     df = fetch_data(ticker)
     if df is not None:
+        fetch_count += 1
         trade = evaluate_trade(df, ticker)
         if trade:
+            trade_count += 1
             results.append(trade)
     progress_bar.progress((i + 1) / len(TICKERS))
 
+st.write(f"Data fetched successfully for {fetch_count} tickers, {trade_count} trades evaluated.")
 if not results:
     st.warning("No trade signals generated. This may be due to data fetch failures or no matching conditions.")
     df_results = pd.DataFrame()
