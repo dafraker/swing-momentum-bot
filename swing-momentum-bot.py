@@ -5,10 +5,10 @@ import datetime
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-   # Page configuration
-   st.set_page_config(page_title="Swing Momentum Bot", layout="wide")
+# Page configuration
+st.set_page_config(page_title="Swing Momentum Bot", layout="wide")
 
-   # Configuration
+# Configuration
    TICKERS = [
        'AAPL', 'MSFT', 'NVDA', 'AMD', 'TSLA', 'GOOGL', 'AMZN', 'META', 'JPM', 'V',
        'NFLX', 'QCOM', 'BA', 'SPY', 'QQQ', 'SMH', 'XLF', 'XLE', 'XLU', 'XLK',
