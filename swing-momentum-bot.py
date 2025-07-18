@@ -21,7 +21,7 @@ TICKERS = [
 ]
 ENTRY_TIME = "15:45"
 EXIT_TIME = "09:31"
-BUY_THRESHOLD = 30
+BUY_THRESHOLD = 40  # Temporarily increased to test
 SELL_THRESHOLD = 70
 MACD_FAST = 12
 MACD_SLOW = 26
@@ -29,7 +29,7 @@ MACD_SIGNAL = 9
 BB_PERIOD = 20
 BB_STD = 2
 DELTA_TARGET = 0.4
-MIN_VOLUME = 500000  # Temporarily lowered to test
+MIN_VOLUME = 500000
 
 st.title("📈 Swing Momentum Bot Dashboard")
 st.markdown("Scans ~100 tickers for overnight swing trades with momentum indicators and call option suggestions.")
@@ -85,6 +85,7 @@ def evaluate_trade(df, ticker):
     if pd.isna(latest['RSI']) or pd.isna(latest['Close']) or pd.isna(latest['EMA20']) or \
        pd.isna(latest['MACD']) or pd.isna(latest['MACD_Signal']) or pd.isna(latest['BB_Upper']) or \
        pd.isna(latest['BB_Lower']) or pd.isna(latest['Volume']):
+        st.write(f"Skipping {ticker}: NaN values in indicators")
         return None
     rsi = latest['RSI']
     price = latest['Close']
@@ -101,6 +102,7 @@ def evaluate_trade(df, ticker):
     signal_score = 0
 
     if volume < MIN_VOLUME:
+        st.write(f"Skipping {ticker}: Volume {volume:,} < {MIN_VOLUME:,}")
         return None
 
     if (rsi < BUY_THRESHOLD and price > ema20 and
@@ -118,6 +120,8 @@ def evaluate_trade(df, ticker):
         signal = "SELL"
         reason = f"RSI {rsi:.2f} > {SELL_THRESHOLD}, Price < EMA20, MACD Bearish"
 
+    if signal == "WAIT":
+        st.write(f"Skipping {ticker}: No signal (RSI={rsi:.2f}, Vol={volume:,})")
     return {
         'Symbol': ticker,
         'Signal': signal,
@@ -233,4 +237,4 @@ st.markdown("""
 - **API Limits**: Large ticker lists may hit yfinance rate limits; reduce TICKERS if slow.
 """)
 
-st.caption("Bot scans for EOD BUY signals (RSI < 30, price > EMA20, MACD bullish, near BB lower). Targets call options with ~0.4 delta for overnight holds.")
+st.caption("Bot scans for EOD BUY signals (RSI < 40, price > EMA20, MACD bullish, near BB lower). Targets call options with ~0.4 delta for overnight holds.")
